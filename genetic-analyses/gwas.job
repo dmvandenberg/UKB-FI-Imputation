@@ -1,0 +1,28 @@
+#!/bin/bash
+
+#SBATCH --time=01:00:00
+#SBATCH --partition=rome
+#SBATCH --ntasks=1
+#SBATCH --nodes=1
+#SBATCH --exclusive
+#SBATCH --output=./FI-GWAS/gwas.log
+
+################################## Define parameters ##################################
+# Don't forget to adjust SBATCH --output flag
+PHENOS=(./FI-imputation/imputed_FIS.pheno)
+OUT_FOLDER="./FI-GWAS"
+#######################################################################################
+
+PHENO_NAME=$(basename "$PHENOS" .pheno)
+echo $PHENO_NAME
+
+# OG qcov: /gpfs/work5/0/gusr0487/UKBAUMC/phenotypes/age.age_sq.25PCs.v2.qcov
+/gpfs/work5/0/gusr0487/UKBAUMC/software/gcta64 --mbfile ./UKB/genotypes/HRC/ukb_imp.HRC.EUR.v3.bfiles.txt \
+                --fastGWA-lmm \
+                --grm-sparse ./UKB/GRM/ukb_imp.HM3.EUR.v4.sp \
+                --pheno $PHENOS \
+                --qcovar ./FI-imputation/average_FIS.qcov \
+                --covar ./sex.array.v2.cov \
+                --est-vg HE \
+                --threads 127 \
+                --out $OUT_FOLDER/$PHENO_NAME

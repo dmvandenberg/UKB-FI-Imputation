@@ -1,0 +1,27 @@
+#!/bin/bash
+#SBATCH --time=00:30:00
+#SBATCH --partition=rome
+#SBATCH --ntasks=1
+#SBATCH --nodes=1
+#SBATCH --array=0-3
+#SBATCH --output=./FI-sumstats/munge.log
+
+################################## Define parameters ##################################
+# Don't forget to adjust SBATCH --array and --output flags
+FILES=(./FI-GWAS/*.gwas.txt.gz)
+OUT_FOLDER="./FI-sumstats"
+#######################################################################################
+
+MAIN_FILE=${FILES[${SLURM_ARRAY_TASK_ID}]}
+echo "Main trait: ${MAIN_FILE}"
+PHENO=$(basename "$MAIN_FILE" .fastGWA)
+echo $PHENO
+
+conda init
+source ~/.bashrc
+conda activate ./software/anaconda2/envs/ldsc/
+
+python ./software/ldsc/munge_sumstats.py --sumstats $MAIN_FILE \
+                --chunksize 500000 \
+                --merge-alleles ./software/ldsc/w_hm3.snplist \
+                --out $OUT_FOLDER/$PHENO

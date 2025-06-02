@@ -1,0 +1,45 @@
+#!/bin/bash
+
+#SBATCH --time=00:30:00
+#SBATCH --partition=rome
+#SBATCH --ntasks=1
+#SBATCH --nodes=1
+#SBATCH --array=0-3
+#SBATCH --output=./FI-GWAS/sumstats/h2_rg_%a.log
+
+# ----------------- INSERT MAIN TRAITS TO CORRELATE HERE ----------------- #
+# Make sure to:
+#   1) The array flag covers the amount of traits you'll analyze.
+#   2) The output flag is set to a folder of your choice.
+MAIN_FILES=(./FI-sumstats/*.txt.gz)
+COMP_FILES=(./sumstats/intelligence_reference/*.sumstats.gz)
+# ------------------------------------------------------------------------ #
+
+# Start up LDSC environent
+conda init
+source ~/.bashrc
+conda activate ./software/anaconda2/envs/ldsc/
+
+# Index files
+MAIN_FILE=${MAIN_FILES[${SLURM_ARRAY_TASK_ID}]}
+echo "Main trait: ${MAIN_FILE}"
+
+# Create comma separated array
+FILES=("$MAIN_FILE" "${COMP_FILES[@]}")
+IFS=","
+FILES_STRING="${FILES[*]}"
+IFS=$' \t\n'
+
+#Run ldsc h2
+python ./software/ldsc/ldsc.py --h2 ${MAIN_FILE} \
+                            --ref-ld-chr ./software/ldsc/eur_w_ld_chr/ \
+                            --w-ld-chr ./software/ldsc/eur_w_ld_chr/
+
+#Run ldsc rg
+python ./software/ldsc/ldsc.py --rg ${FILES_STRING} \
+                            --ref-ld-chr ./software/ldsc/eur_w_ld_chr/ \
+                            --w-ld-chr ./software/ldsc/eur_w_ld_chr/
+echo "Done.."
+
+
+

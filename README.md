@@ -24,6 +24,8 @@ Genetic correlations and SNP heritabilities were computed using [LDSC](https://g
 
 - **[munge.job](https://github.com/dmvandenberg/UKB-FI-Imputation/blob/main/genetic-analyses/munge.job)**: Script to format following LDSC standards
 - **[h2_rg.job](https://github.com/dmvandenberg/UKB-FI-Imputation/blob/main/genetic-analyses/h2_rg.job)**: To compute SNP heritability and genetic correlations with reference GWAS
+- ....
+- ....
 
 #### Rare variant analyses
 

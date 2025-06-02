@@ -8,7 +8,7 @@ for a detailed description of analyses and decisions please refer to our paper.
 All scripts regarding imputation
 
 - **prepare_FI_pheno.R**: is the script used to standardize FI measured and configure covariate files for GWAS with the appropriate values (age at time of measurement). This script requires UKB variables 34-0.0 and 52-0.0, and all instances of 20016, 20131, 21003, 20135. In addition it requires PC loadings for 25 ancestry PCs, and the sex and array used for genotyping for all individuals.
-- **FI_imputation.R**: is used for imputation. It leverages softImpute and requires access to various UKB datafield to impute FI. We have evaluated 2 sets of imputation variables for which the UKB variable ID's can be found in the folder `imputation/imputation-variables`.
+- **[FI_imputation.R](https://github.com/dmvandenberg/UKB-FI-Imputation/blob/main/imputation/FI_imputation.R)**: is used for imputation. It leverages softImpute and requires access to various UKB datafield to impute FI. We have evaluated 2 sets of imputation variables for which the UKB variable ID's can be found in the folder `imputation/imputation-variables`.
 - **gwas_by_subtraction.R**: #TOADD
 - **rescale_combine.R**: is used to mega-analyze measured and imputed FI values after standardizing them separately.
 - **combine.metal**: is used to meta-analyze GWAS of measured and imputed FI.
